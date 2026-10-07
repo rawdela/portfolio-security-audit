@@ -1,0 +1,5 @@
+GET        200
+POST       405
+PUT        405
+PATCH      405
+DELETE     405

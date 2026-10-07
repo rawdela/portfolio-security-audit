@@ -1,0 +1,33 @@
+app/db.py:2:from supabase import create_client
+app/db.py:8:    if not s.supabase_url or not s.supabase_service_role_key:
+app/db.py:9:        raise RuntimeError("Supabase environment variables are missing")
+app/db.py:10:    return create_client(s.supabase_url, s.supabase_service_role_key)
+app/config.py:16:    supabase_url: str = ""
+app/config.py:17:    supabase_service_role_key: str = ""
+app/config.py:18:    supabase_storage_bucket: str = "portfolio-media"
+app/config.py:37:            if not all((self.telegram_bot_token, self.supabase_service_role_key)) or len(self.telegram_webhook_secret) < 32:
+app/config.py:41:            for url in (self.public_base_url, self.supabase_url, self.portfolio_url):
+app/content.py:27:    query = db.table("portfolio_profile").select("*").eq("id", 1)
+app/content.py:33:        query = db.table(table).select("*")
+app/main.py:178:@app.get("/api/admin/bootstrap")
+app/main.py:188:@app.get("/api/admin/profile")
+app/main.py:195:        db.table("portfolio_profile")
+app/main.py:209:@app.patch("/api/admin/profile")
+app/main.py:210:def update_profile(
+app/main.py:221:        db.table("portfolio_profile")
+app/main.py:240:@app.post("/api/admin/upload")
+app/main.py:261:        bucket = db.storage.from_(settings.supabase_storage_bucket)
+app/main.py:270:        logger.error("Media upload failed: bucket=%s type=%s extension=%s bytes=%d", settings.supabase_storage_bucket, type(exc).__name__, ext, len(content))
+app/main.py:275:@app.get("/api/admin/{resource}")
+app/main.py:292:        .table(table)
+app/main.py:303:@app.post("/api/admin/{resource}")
+app/main.py:304:def create_resource(resource: str, payload: Payload, user=Depends(require_admin), idempotency_key: str = Header(default="")):
+app/main.py:317:        existing = content_rows(db.table(table).select("*").eq("id", item_id).execute().data)
+app/main.py:324:        rows = content_rows(db.table(table).insert(data).execute().data)
+app/main.py:327:            rows = content_rows(db.table(table).select("*").eq("id", data["id"]).execute().data)
+app/main.py:337:    "/api/admin/{resource}/{item_id}"
+app/main.py:339:def update_resource(
+app/main.py:361:        .table(table)
+app/main.py:382:    "/api/admin/{resource}/{item_id}"
+app/main.py:399:    rows = content_rows(get_db().table(table).delete().eq("id", str(item_id)).execute().data)
+app/main.py:564:        limit = 6 * 1024 * 1024 if scope["path"] == "/api/admin/upload" else 256 * 1024

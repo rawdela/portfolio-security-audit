@@ -1,0 +1,4 @@
+/admin               404
+/login               404
+/dashboard           404
+/cms                 404

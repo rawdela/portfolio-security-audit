@@ -1,0 +1,2157 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+
+    <meta name="theme-color" content="#0e1014" />
+
+    <title>Portfolio Admin</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+
+    <style>
+      :root {
+        --bg: #0e1014;
+
+        --surface: #151820;
+
+        --raised: #1b1f2a;
+
+        --line: #262b38;
+
+        --text: #eceef4;
+
+        --muted: #8b93a7;
+
+        --accent: #8ea4ff;
+
+        --on-accent: #0c1020;
+
+        --danger: #ff7a86;
+
+        --ok: #6fd6a3;
+
+        --r: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+
+        background: var(--bg);
+
+        color: var(--text);
+
+        font:
+          15px/1.5 Inter,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button {
+        font: inherit;
+
+        color: inherit;
+
+        cursor: pointer;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+
+        outline-offset: 2px;
+      }
+
+      .shell {
+        max-width: 760px;
+
+        margin: 0 auto;
+
+        padding: 0 16px calc(40px + env(safe-area-inset-bottom));
+      }
+
+      /* header */
+
+      .top {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: calc(18px + env(safe-area-inset-top)) 0 14px;
+      }
+
+      .top h1 {
+        font-size: 20px;
+
+        font-weight: 600;
+
+        margin: 0;
+
+        letter-spacing: -0.01em;
+      }
+
+      .status {
+        font-size: 13px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .status.ok::before {
+        content: "";
+
+        display: inline-block;
+
+        width: 6px;
+
+        height: 6px;
+
+        border-radius: 50%;
+
+        background: var(--ok);
+
+        margin-right: 6px;
+
+        vertical-align: 1px;
+      }
+
+      /* tabs */
+
+      .tabs-wrap {
+        position: sticky;
+
+        top: 0;
+
+        z-index: 5;
+
+        background: var(--bg);
+
+        margin: 0 -16px;
+
+        padding: 0 16px;
+
+        border-bottom: 1px solid var(--line);
+      }
+
+      .tabs {
+        display: flex;
+
+        gap: 22px;
+
+        overflow-x: auto;
+
+        scrollbar-width: none;
+      }
+
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tabs button {
+        background: none;
+
+        border: 0;
+
+        padding: 12px 0;
+
+        color: var(--muted);
+
+        white-space: nowrap;
+
+        border-bottom: 2px solid transparent;
+
+        margin-bottom: -1px;
+
+        transition:
+          color 0.15s,
+          border-color 0.15s;
+      }
+
+      .tabs button:hover {
+        color: var(--text);
+      }
+
+      .tabs button.active {
+        color: var(--text);
+
+        border-color: var(--accent);
+
+        font-weight: 600;
+      }
+
+      /* section */
+
+      .section-head {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 20px 0 12px;
+      }
+
+      .section-head h2 {
+        font-size: 15px;
+
+        font-weight: 600;
+
+        margin: 0;
+      }
+
+      .count {
+        color: var(--muted);
+
+        font-weight: 400;
+
+        margin-left: 6px;
+      }
+
+      .btn {
+        border: 1px solid var(--line);
+
+        background: var(--raised);
+
+        border-radius: 10px;
+
+        padding: 9px 14px;
+
+        transition:
+          background 0.15s,
+          opacity 0.15s;
+      }
+
+      .btn:hover {
+        background: #222736;
+      }
+
+      .btn:disabled {
+        opacity: 0.55;
+
+        cursor: default;
+      }
+
+      .btn.primary {
+        background: var(--accent);
+
+        color: var(--on-accent);
+
+        border-color: transparent;
+
+        font-weight: 600;
+      }
+
+      .btn.primary:hover {
+        filter: brightness(1.06);
+      }
+
+      .btn.ghost {
+        background: transparent;
+      }
+
+      .btn.danger {
+        color: var(--danger);
+
+        background: transparent;
+      }
+
+      .btn.small {
+        padding: 7px 12px;
+
+        font-size: 14px;
+      }
+
+      .search {
+        width: 100%;
+
+        margin-bottom: 12px;
+
+        padding: 10px 12px;
+
+        background: var(--surface);
+
+        border: 1px solid var(--line);
+
+        border-radius: 10px;
+
+        color: var(--text);
+
+        font: inherit;
+      }
+
+      /* list */
+
+      .items {
+        display: grid;
+
+        gap: 8px;
+      }
+
+      .item {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        width: 100%;
+
+        text-align: left;
+
+        background: var(--surface);
+
+        border: 1px solid var(--line);
+
+        border-radius: var(--r);
+
+        padding: 12px 14px;
+
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+      }
+
+      .item:hover {
+        border-color: #38405a;
+
+        background: #181c26;
+      }
+
+      .thumb {
+        width: 40px;
+
+        height: 40px;
+
+        border-radius: 8px;
+
+        flex: none;
+
+        object-fit: cover;
+
+        background: var(--raised);
+
+        border: 1px solid var(--line);
+      }
+
+      .item .txt {
+        min-width: 0;
+
+        flex: 1;
+      }
+
+      .item strong {
+        display: block;
+
+        font-weight: 600;
+
+        white-space: nowrap;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+      }
+
+      .sub {
+        font-size: 13px;
+
+        color: var(--muted);
+
+        white-space: nowrap;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+      }
+
+      .badge {
+        font-size: 12px;
+
+        color: var(--muted);
+
+        border: 1px solid var(--line);
+
+        border-radius: 99px;
+
+        padding: 1px 8px;
+
+        flex: none;
+      }
+
+      .chev {
+        color: var(--muted);
+
+        flex: none;
+      }
+
+      .empty {
+        padding: 36px 16px;
+
+        text-align: center;
+
+        color: var(--muted);
+
+        border: 1px dashed var(--line);
+
+        border-radius: var(--r);
+      }
+
+      .empty .btn {
+        margin-top: 12px;
+      }
+
+      .skeleton {
+        height: 66px;
+
+        border-radius: var(--r);
+
+        background: linear-gradient(
+          90deg,
+          var(--surface),
+          var(--raised),
+          var(--surface)
+        );
+
+        background-size: 200% 100%;
+
+        animation: sh 1.2s infinite linear;
+      }
+
+      @keyframes sh {
+        to {
+          background-position: -200% 0;
+        }
+      }
+
+      /* dialogs */
+
+      dialog {
+        width: min(640px, calc(100% - 24px));
+
+        max-height: calc(100% - 24px);
+
+        border: 1px solid var(--line);
+
+        border-radius: 18px;
+
+        padding: 0;
+
+        background: var(--surface);
+
+        color: var(--text);
+      }
+
+      dialog::backdrop {
+        background: rgba(5, 7, 12, 0.7);
+      }
+
+      dialog[open] {
+        animation: pop 0.18s ease-out;
+      }
+
+      @keyframes pop {
+        from {
+          opacity: 0;
+
+          transform: translateY(8px);
+        }
+      }
+
+      .modal {
+        display: flex;
+
+        flex-direction: column;
+
+        max-height: calc(100vh - 24px);
+
+        max-height: calc(100dvh - 24px);
+      }
+
+      .modal-head {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 16px 18px;
+
+        border-bottom: 1px solid var(--line);
+      }
+
+      .modal-head h3 {
+        margin: 0;
+
+        font-size: 16px;
+
+        font-weight: 600;
+      }
+
+      .close {
+        background: none;
+
+        border: 0;
+
+        color: var(--muted);
+
+        font-size: 18px;
+
+        padding: 4px 8px;
+
+        border-radius: 8px;
+      }
+
+      .close:hover {
+        color: var(--text);
+      }
+
+      .body {
+        padding: 16px 18px;
+
+        overflow-y: auto;
+
+        flex: 1;
+      }
+
+      .grid {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 14px;
+      }
+
+      .field {
+        display: grid;
+
+        gap: 6px;
+
+        align-content: start;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      .field > label {
+        font-size: 13px;
+
+        color: var(--muted);
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+
+        border: 1px solid var(--line);
+
+        border-radius: 10px;
+
+        background: var(--bg);
+
+        color: var(--text);
+
+        padding: 10px 12px;
+
+        font: inherit;
+
+        font-size: 16px; /* 16px stops iOS zoom */
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+
+        border-color: var(--accent);
+      }
+
+      textarea {
+        min-height: 96px;
+
+        resize: vertical;
+      }
+
+      .toggle {
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        padding-top: 4px;
+
+        color: var(--text);
+
+        font-size: 15px;
+      }
+
+      .toggle input {
+        width: 18px;
+
+        height: 18px;
+
+        accent-color: var(--accent);
+      }
+
+      .upload {
+        display: flex;
+
+        gap: 10px;
+
+        align-items: center;
+      }
+
+      .upload img {
+        width: 44px;
+
+        height: 44px;
+
+        border-radius: 8px;
+
+        object-fit: cover;
+
+        border: 1px solid var(--line);
+
+        flex: none;
+      }
+
+      .upload .pick {
+        flex: 1;
+
+        min-width: 0;
+      }
+
+      .upload input[type="file"] {
+        padding: 7px;
+
+        font-size: 13px;
+      }
+
+      .hint {
+        font-size: 12px;
+
+        color: var(--muted);
+      }
+
+      .foot {
+        display: flex;
+
+        gap: 8px;
+
+        align-items: center;
+
+        padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+
+        border-top: 1px solid var(--line);
+      }
+
+      .foot .spacer {
+        flex: 1;
+      }
+
+      .confirm {
+        padding: 20px;
+
+        width: min(380px, calc(100% - 24px));
+      }
+
+      .confirm p {
+        margin: 0 0 4px;
+
+        font-weight: 600;
+      }
+
+      .confirm .sub {
+        white-space: normal;
+      }
+
+      .confirm .foot {
+        border: 0;
+
+        padding: 16px 0 0;
+
+        justify-content: flex-end;
+      }
+
+      .toast {
+        position: fixed;
+
+        left: 50%;
+
+        bottom: calc(20px + env(safe-area-inset-bottom));
+
+        transform: translate(-50%, 12px);
+
+        background: var(--raised);
+
+        border: 1px solid var(--line);
+
+        padding: 10px 16px;
+
+        border-radius: 10px;
+
+        opacity: 0;
+
+        pointer-events: none;
+
+        transition:
+          opacity 0.2s,
+          transform 0.2s;
+
+        z-index: 50;
+
+        max-width: calc(100% - 32px);
+      }
+
+      .toast.show {
+        opacity: 1;
+
+        transform: translate(-50%, 0);
+      }
+
+      .toast.err {
+        border-color: var(--danger);
+
+        color: var(--danger);
+      }
+
+      /* mobile: editor becomes a bottom sheet */
+
+      @media (max-width: 620px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        dialog#editor {
+          width: 100%;
+
+          max-width: none;
+
+          margin: auto 0 0;
+
+          border-radius: 18px 18px 0 0;
+
+          border-bottom: 0;
+        }
+
+        dialog#editor[open] {
+          animation: sheet 0.22s ease-out;
+        }
+
+        @keyframes sheet {
+          from {
+            transform: translateY(40px);
+
+            opacity: 0;
+          }
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+
+          transition: none !important;
+        }
+      }
+
+      /* ===== Portfolio CMS UI refresh ===== */
+      .mini-spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      :root {
+        --bg: #0b0d12;
+        --surface: #12151d;
+        --raised: #191d27;
+        --line: #252b38;
+        --text: #f5f7fb;
+        --muted: #939bad;
+        --accent: #8ea4ff;
+        --accent-soft: rgba(142, 164, 255, 0.13);
+        --on-accent: #0b1022;
+        --danger: #ff7d88;
+        --danger-soft: rgba(255, 125, 136, 0.1);
+        --ok: #69d3a0;
+        --r: 16px;
+        --shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+      }
+
+      html[data-theme="light"] {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --surface: #ffffff;
+        --raised: #f1f3f8;
+        --line: #e1e5ee;
+        --text: #171a22;
+        --muted: #687084;
+        --accent: #536ee8;
+        --accent-soft: rgba(83, 110, 232, 0.1);
+        --on-accent: #ffffff;
+        --danger: #d74c5a;
+        --danger-soft: rgba(215, 76, 90, 0.08);
+        --ok: #2f9f70;
+        --shadow: 0 10px 30px rgba(36, 45, 70, 0.08);
+      }
+
+      body {
+        min-height: 100%;
+        background:
+          radial-gradient(
+            circle at 85% -10%,
+            var(--accent-soft),
+            transparent 28rem
+          ),
+          var(--bg);
+      }
+
+      .shell {
+        max-width: 780px;
+        padding: 0 16px calc(42px + env(safe-area-inset-bottom));
+      }
+
+      .top {
+        padding-top: calc(16px + env(safe-area-inset-top));
+        padding-bottom: 14px;
+      }
+
+      .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        min-width: 0;
+      }
+
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 13px;
+        display: grid;
+        place-items: center;
+        background: var(--accent-soft);
+        color: var(--accent);
+        border: 1px solid var(--line);
+        flex: 0 0 auto;
+      }
+
+      .brand-icon svg,
+      .icon-btn svg,
+      .btn svg,
+      .tabs svg {
+        width: 18px;
+        height: 18px;
+        stroke-width: 2;
+      }
+
+      .brand-copy {
+        min-width: 0;
+      }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 1px;
+      }
+
+      .top h1 {
+        font-size: 21px;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+      }
+
+      .status {
+        font-size: 12.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .top-actions {
+        display: flex;
+        gap: 8px;
+        flex: 0 0 auto;
+      }
+
+      .icon-btn {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 13px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--muted);
+        transition: 0.18s ease;
+      }
+
+      .icon-btn:active {
+        transform: scale(0.96);
+      }
+
+      .intro-card {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: center;
+        padding: 16px;
+        margin-bottom: 14px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: linear-gradient(135deg, var(--surface), var(--raised));
+        box-shadow: var(--shadow);
+      }
+
+      .intro-card strong {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 3px;
+      }
+
+      .intro-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12.5px;
+        line-height: 1.45;
+        max-width: 500px;
+      }
+
+      .live-pill {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        padding: 6px 9px;
+        border-radius: 999px;
+        background: rgba(105, 211, 160, 0.09);
+        color: var(--ok);
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .live-pill span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .tabs-wrap {
+        top: 0;
+        margin: 0 -16px;
+        padding: 8px 16px 9px;
+        border-bottom: 0;
+        background: var(--bg);
+      }
+
+      .tabs {
+        gap: 8px;
+      }
+
+      .tabs button {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        flex: 0 0 auto;
+        padding: 9px 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface);
+        color: var(--muted);
+        margin: 0;
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+
+      .tabs button.active {
+        color: var(--text);
+        background: var(--accent-soft);
+        border-color: var(--accent);
+      }
+
+      .section-head {
+        padding: 18px 0 12px;
+      }
+
+      .section-head h2 {
+        font-size: 16px;
+        letter-spacing: -0.01em;
+      }
+
+      .btn {
+        min-height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border-radius: 12px;
+      }
+
+      .btn.danger {
+        background: var(--danger-soft);
+        border-color: var(--danger);
+      }
+
+      .search {
+        min-height: 46px;
+        border-radius: 13px;
+        background: var(--surface);
+        margin-bottom: 10px;
+      }
+
+      .items {
+        gap: 9px;
+      }
+
+      .item {
+        min-height: 70px;
+        border-radius: 15px;
+        padding: 12px 13px;
+      }
+
+      .item:active {
+        transform: scale(0.994);
+      }
+
+      .thumb {
+        width: 44px;
+        height: 44px;
+        border-radius: 11px;
+      }
+
+      .item strong {
+        font-size: 14.5px;
+      }
+
+      .sub {
+        margin-top: 2px;
+        font-size: 12.5px;
+      }
+
+      .chev {
+        width: 28px;
+        height: 28px;
+        display: grid;
+        place-items: center;
+        border-radius: 9px;
+        background: var(--raised);
+        font-size: 20px;
+      }
+
+      .badge {
+        background: var(--raised);
+        padding: 3px 8px;
+      }
+
+      .empty {
+        background: var(--surface);
+        padding: 42px 18px;
+        border-radius: 16px;
+      }
+
+      dialog {
+        border-radius: 20px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+      }
+
+      .modal-head {
+        padding: 16px 18px;
+      }
+
+      .modal-head h3 {
+        font-size: 17px;
+        letter-spacing: -0.01em;
+      }
+
+      .close {
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border-radius: 11px;
+        background: var(--raised);
+      }
+
+      input,
+      textarea,
+      select {
+        min-height: 46px;
+        border-radius: 12px;
+        background: var(--bg);
+      }
+
+      textarea {
+        min-height: 105px;
+      }
+
+      .field > label {
+        font-size: 12px;
+        font-weight: 650;
+      }
+
+      .foot {
+        background: var(--surface);
+      }
+
+      .toast {
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      @media (max-width: 620px) {
+        .shell {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .intro-card {
+          align-items: flex-start;
+        }
+
+        .intro-card p {
+          max-width: 270px;
+        }
+
+        .tabs-wrap {
+          margin-left: -14px;
+          margin-right: -14px;
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+
+        .top h1 {
+          font-size: 19px;
+        }
+
+        .brand-icon,
+        .icon-btn {
+          width: 40px;
+          height: 40px;
+        }
+
+        .top-actions {
+          gap: 6px;
+        }
+
+        dialog#editor {
+          border-radius: 22px 22px 0 0;
+        }
+      }
+
+      /* Keep controls within Telegram's safe viewport, including iOS sheets. */
+      :root {
+        --safe-top: max(env(safe-area-inset-top, 0px), var(--tg-safe-area-inset-top, 0px));
+        --safe-bottom: max(env(safe-area-inset-bottom, 0px), var(--tg-safe-area-inset-bottom, 0px));
+        --content-top: var(--tg-content-safe-area-inset-top, 0px);
+        --content-bottom: var(--tg-content-safe-area-inset-bottom, 0px);
+      }
+      [hidden] { display: none !important; }
+      html, body { width: 100%; min-width: 0; }
+      .shell { padding-bottom: calc(42px + var(--safe-bottom) + var(--content-bottom)); }
+      .top { padding-top: calc(16px + var(--safe-top) + var(--content-top)); }
+      .brand { flex: 1; }
+      .brand, .brand-copy, .intro-card > div:first-child, .section-head h2 { min-width: 0; }
+      .intro-card > div:first-child { flex: 1; }
+      .live-pill, .close, .btn, .icon-btn { flex-shrink: 0; }
+      .top h1 { overflow-wrap: anywhere; }
+      .tabs { min-width: 0; max-width: 100%; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+      .tabs svg, .btn svg, .chev svg, .close svg { flex: none; width: 18px; height: 18px; }
+      .section-head h2, .modal-head h3 { overflow-wrap: anywhere; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .field, .upload, .body, input, textarea, select, .item { min-width: 0; max-width: 100%; }
+      .items { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+      .item .sub { display: block; min-width: 0; max-width: 100%; }
+      .upload input[type="file"] { flex: 1 1 0; width: 0; }
+      .modal-head, .foot { flex: 0 0 auto; }
+      .modal-head h3 { min-width: 0; }
+      .body { min-height: 0; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+      dialog { max-height: calc(var(--app-height, 100dvh) - var(--safe-top) - var(--content-top) - 24px); }
+      .modal { max-height: calc(var(--app-height, 100dvh) - var(--safe-top) - var(--content-top) - 26px); }
+      .foot { flex-wrap: wrap; padding-bottom: calc(12px + var(--safe-bottom) + var(--content-bottom)); }
+      .foot .btn { padding-left: 10px; padding-right: 10px; }
+      .toggle input { min-height: 18px; flex: none; }
+      .hint, .toast { overflow-wrap: anywhere; }
+      .toast { bottom: calc(20px + var(--safe-bottom) + var(--content-bottom)); white-space: normal; }
+      .file-link { color: var(--accent); overflow-wrap: anywhere; }
+      @media (max-width: 620px) {
+        .grid { grid-template-columns: minmax(0, 1fr); }
+        dialog#editor { width: 100%; max-width: 100%; }
+      }
+      @media (max-width: 360px) {
+        .brand-icon { display: none; }
+        .top h1 { font-size: 17px; }
+        .intro-card { flex-wrap: wrap; }
+        .foot .spacer { display: none; }
+        .foot { justify-content: flex-end; gap: 6px; padding-left: 12px; padding-right: 12px; }
+        .foot .btn { font-size: 13px; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="shell">
+      <header class="top">
+        <div class="brand">
+          <div class="brand-icon" aria-hidden="true">
+            <i data-lucide="panel-top"></i>
+          </div>
+          <div class="brand-copy">
+            <div class="eyebrow">Portfolio CMS</div>
+            <h1 id="welcomeTitle">Welcome back Dela</h1>
+            <div id="hello" class="status">Connecting…</div>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button
+            class="icon-btn"
+            id="themeToggle"
+            type="button"
+            aria-label="Toggle theme"
+          >
+            <i data-lucide="sun"></i>
+          </button>
+          <button
+            class="icon-btn"
+            id="refresh"
+            type="button"
+            aria-label="Refresh content"
+          >
+            <i data-lucide="refresh-cw"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="intro-card">
+        <div>
+          <strong>Manage your portfolio</strong>
+          <p>Update your profile, projects, experience, skills and more.</p>
+        </div>
+        <div class="live-pill"><span></span> Live</div>
+      </div>
+
+      <div class="tabs-wrap">
+        <nav id="tabs" class="tabs" aria-label="Sections"></nav>
+      </div>
+
+      <section>
+        <div class="section-head">
+          <h2>
+            <span id="sectionTitle">Content</span
+            ><span id="count" class="count"></span>
+          </h2>
+
+          <button id="addBtn" class="btn primary small">
+            <i data-lucide="plus"></i><span>Add new</span>
+          </button>
+        </div>
+
+        <input
+          id="search"
+          class="search"
+          type="search"
+          placeholder="Search"
+          hidden
+        />
+
+        <div id="items" class="items" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <dialog id="editor">
+      <form id="form" class="modal" method="dialog">
+        <div class="modal-head">
+          <h3 id="formTitle">Edit</h3>
+
+          <button type="button" class="close" id="closeBtn" aria-label="Close">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div class="body"><div id="fields" class="grid"></div></div>
+
+        <div class="foot">
+          <button type="button" class="btn danger small" id="deleteBtn" hidden>
+            <i data-lucide="trash-2"></i><span>Delete</span>
+          </button>
+
+          <span class="spacer"></span>
+
+          <button type="button" class="btn ghost" id="cancelBtn">Cancel</button>
+
+          <button type="submit" class="btn primary" id="saveBtn">
+            <i data-lucide="check"></i><span>Save changes</span>
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="confirm" class="confirm">
+      <p id="confirmTitle">Delete this item?</p>
+
+      <div class="sub">This can't be undone.</div>
+
+      <div class="foot">
+        <button type="button" class="btn ghost" id="noBtn">Keep it</button>
+
+        <button type="button" class="btn danger" id="yesBtn">Delete</button>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script>
+      const tg = window.Telegram?.WebApp;
+
+      if (tg) {
+        tg.ready();
+
+        tg.expand();
+
+        try {
+          tg.setHeaderColor("#0e1014");
+
+          tg.setBackgroundColor("#0e1014");
+        } catch {}
+      }
+
+      const devId =
+        new URLSearchParams(location.search).get("dev_user_id") || "";
+
+      function syncViewport() {
+        const height = Math.min(tg?.viewportStableHeight || innerHeight, window.visualViewport?.height || innerHeight);
+        document.documentElement.style.setProperty("--app-height", height + "px");
+      }
+      syncViewport();
+      window.visualViewport?.addEventListener("resize", syncViewport);
+      window.addEventListener("resize", syncViewport);
+      tg?.onEvent?.("viewportChanged", syncViewport);
+      tg?.onEvent?.("themeChanged", () => {
+        if (!savedTheme) applyTheme(tg.colorScheme === "light" ? "light" : "dark");
+      });
+
+      const authHeaders = () => ({
+        ...(tg?.initData ? { "X-Telegram-Init-Data": tg.initData } : {}),
+        ...(!tg?.initData && devId ? { "X-Dev-User-ID": devId } : {}),
+      });
+
+      const headers = () => ({
+        "Content-Type": "application/json",
+
+        ...authHeaders(),
+      });
+
+      const RES = {
+        profile: {
+          label: "Profile",
+
+          single: true,
+
+          fields: [
+            ["name", "Name"],
+
+            ["headline", "Headline"],
+
+            ["subheadline", "Subheadline"],
+
+            ["summary", "Summary", "textarea"],
+
+            ["about_text", "About text", "textarea"],
+
+            ["location", "Location"],
+
+            ["email", "Email"],
+
+            ["phone", "Phone"],
+
+            ["availability", "Availability"],
+
+            ["avatar_url", "Avatar", "upload"],
+
+            ["resume_url", "Resume", "upload"],
+
+            ["years_coding", "Years coding", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+
+        "social-links": {
+          label: "Socials",
+
+          fields: [
+            ["platform", "Platform"],
+
+            ["label", "Label"],
+
+            ["url", "URL"],
+
+            ["icon", "Icon"],
+
+            ["sort_order", "Order", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+
+        education: {
+          label: "Education",
+
+          fields: [
+            ["institution", "Institution"],
+
+            ["degree", "Degree"],
+
+            ["period", "Period"],
+
+            ["status", "Status"],
+
+            ["description", "Description", "textarea"],
+
+            ["website_url", "Website URL"],
+
+            ["image_url", "Logo or image", "upload"],
+
+            ["sort_order", "Order", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+
+        experiences: {
+          label: "Experience",
+
+          fields: [
+            ["organization", "Organization"],
+
+            ["role", "Role"],
+
+            ["period", "Period"],
+
+            ["status", "Status"],
+
+            ["description", "Description", "textarea"],
+
+            ["bullets", "Bullets (one per line)", "lines"],
+
+            ["tags", "Tags (comma separated)", "tags"],
+
+            ["links", "Links (JSON)", "json"],
+
+            ["image_url", "Logo or image", "upload"],
+
+            ["sort_order", "Order", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+
+        certifications: {
+          label: "Certs",
+
+          fields: [
+            ["title", "Title"],
+
+            ["organization", "Organization"],
+
+            ["period", "Period"],
+
+            ["description", "Description", "textarea"],
+
+            ["credential_url", "Credential URL"],
+
+            ["image_url", "Certificate image", "upload"],
+
+            ["sort_order", "Order", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+
+        projects: {
+          label: "Projects",
+
+          fields: [
+            ["title", "Title"],
+
+            ["description", "Description", "textarea"],
+
+            ["year", "Year"],
+
+            ["category", "Category"],
+
+            ["project_type", "Type", "project-type"],
+
+            ["tags", "Tags (comma separated)", "tags"],
+
+            ["live_url", "Live URL"],
+
+            ["repo_url", "Repository URL"],
+
+            ["extra_url", "Extra URL"],
+
+            ["image_url", "Project image", "upload"],
+
+            ["sort_order", "Order", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+
+        "skill-categories": {
+          label: "Skill groups",
+
+          fields: [
+            ["name", "Name"],
+
+            ["subtitle", "Subtitle"],
+
+            ["icon", "Icon (soft-skills for soft skill cards)"],
+
+            ["sort_order", "Order", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+
+        skills: {
+          label: "Skills",
+
+          fields: [
+            ["category_id", "Category", "category"],
+
+            ["name", "Skill"],
+
+            ["level", "Level / soft skill description"],
+
+            ["percent", "Percent", "number"],
+
+            ["sort_order", "Order", "number"],
+
+            ["published", "Published", "boolean"],
+          ],
+        },
+      };
+
+      let active = "profile",
+        current = null,
+        cache = {},
+        query = "",
+        dirty = false,
+        toastTimer;
+      let authenticated = false, saving = false, removing = false, editorResource = "profile", requestKey = "";
+      const pendingUploads = new Set();
+      const REQUIRED = {"social-links":["platform","url"], education:["institution"], experiences:["organization","role"], certifications:["title"], projects:["title"], "skill-categories":["name"], skills:["name"]};
+      const busy = () => saving || removing || pendingUploads.size > 0;
+      function updateBusy() {
+        $("#saveBtn").disabled = !authenticated || busy();
+        ["#closeBtn", "#cancelBtn", "#deleteBtn"].forEach(selector => $(selector).disabled = busy());
+        $("#fields").querySelectorAll("input, textarea, select, button").forEach(el => el.disabled = saving || removing || (pendingUploads.size > 0 && el.type === "file"));
+      }
+      function safeMediaURL(value) {
+        try { const url = new URL(value, location.origin); return ["https:", "http:"].includes(url.protocol) ? url.href : ""; }
+        catch { return ""; }
+      }
+
+      const $ = (s) => document.querySelector(s);
+
+      function toast(m, isErr) {
+        const t = $("#toast");
+
+        const modal = $("#confirm[open]") || $("#editor[open]");
+        (modal || document.body).appendChild(t);
+        t.textContent = m;
+
+        t.className = "toast show" + (isErr ? " err" : "");
+
+        clearTimeout(toastTimer);
+
+        t.setAttribute("role", isErr ? "alert" : "status");
+        toastTimer = setTimeout(() => (t.className = "toast"), isErr ? 7000 : 4000);
+      }
+
+      const esc = (v) =>
+        String(v ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+
+      async function api(path, opt = {}) {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), opt.body instanceof FormData ? 60000 : 45000);
+        try {
+          const multipart = opt.body instanceof FormData;
+          const r = await fetch(path, {...opt, cache:"no-store", signal:controller.signal,
+            headers: {...(multipart ? authHeaders() : headers()), ...(opt.headers || {})}});
+          const result = await r.json().catch(() => null);
+          if (!r.ok) {
+            if ([401,403].includes(r.status)) {
+              authenticated = false;
+              $("#hello").textContent = "Session expired or unauthorized. Reopen from Telegram.";
+              $("#addBtn").disabled = true;
+              updateBusy();
+            }
+            const detail = result?.detail;
+            const message = typeof detail === "string" ? detail : Array.isArray(detail) ? detail.map(e => e.msg || "Invalid input").join("; ") : "Request failed ("+r.status+"). Please retry.";
+            const error = new Error(message); error.status = r.status; throw error;
+          }
+          if (result === null) throw new Error("Server returned an invalid response. Please retry.");
+          return result;
+        } catch (e) {
+          if (e.name === "AbortError") throw new Error("Request timed out. Refresh before retrying; the service may be waking up.");
+          if (e instanceof TypeError) throw new Error("Cannot reach the CMS. Check your connection and retry.");
+          throw e;
+        } finally { clearTimeout(timeout); }
+      }
+
+      const titleFor = (x) =>
+        x.title ||
+        x.name ||
+        x.organization ||
+        x.institution ||
+        x.platform ||
+        "Untitled";
+
+      const subFor = (x) =>
+        x.role ||
+        x.degree ||
+        x.organization ||
+        x.url ||
+        x.level ||
+        x.headline ||
+        "";
+
+      const thumbFor = (x) =>
+        [x.image_url, x.avatar_url].find((u) => u && !/\.pdf($|\?)/i.test(u));
+
+      const TAB_ICONS = {
+        profile: "user-round",
+        "social-links": "share-2",
+        education: "graduation-cap",
+        experiences: "briefcase-business",
+        certifications: "badge-check",
+        projects: "folder-kanban",
+        "skill-categories": "layers-3",
+        skills: "sparkles",
+      };
+
+      function refreshIcons() {
+        try {
+          window.lucide?.createIcons({ attrs: { "aria-hidden": "true" } });
+        } catch {}
+      }
+
+      function applyTheme(theme) {
+        document.documentElement.dataset.theme = theme;
+        const icon = $("#themeToggle");
+        if (icon)
+          icon.innerHTML = `<i data-lucide="${theme === "light" ? "moon" : "sun"}"></i>`;
+        try {
+          tg?.setHeaderColor(theme === "light" ? "#f6f7fb" : "#0b0d12");
+          tg?.setBackgroundColor(theme === "light" ? "#f6f7fb" : "#0b0d12");
+        } catch {}
+        refreshIcons();
+      }
+
+      let savedTheme = "";
+      try {
+        savedTheme = localStorage.getItem("portfolio-cms-theme") || "";
+      } catch {}
+
+      const initialTheme =
+        savedTheme || (tg?.colorScheme === "light" ? "light" : "dark");
+      applyTheme(initialTheme);
+
+      $("#themeToggle").addEventListener("click", () => {
+        const next =
+          document.documentElement.dataset.theme === "light" ? "dark" : "light";
+        try {
+          localStorage.setItem("portfolio-cms-theme", next);
+        } catch {}
+        applyTheme(next);
+      });
+
+      function renderTabs() {
+        const t = $("#tabs");
+
+        t.innerHTML = "";
+
+        for (const [k, v] of Object.entries(RES)) {
+          const b = document.createElement("button");
+
+          b.innerHTML = `<i data-lucide="${TAB_ICONS[k] || "circle"}"></i><span>${esc(v.label)}</span>`;
+
+          b.className = k === active ? "active" : "";
+
+          b.onclick = () => {
+            active = k;
+
+            current = null;
+
+            query = "";
+
+            $("#search").value = "";
+
+            renderTabs();
+
+            load();
+          };
+
+          t.appendChild(b);
+        }
+
+        refreshIcons();
+        const selected = t.querySelector(".active");
+        if (selected) t.scrollTo({left:Math.max(0, selected.offsetLeft - (t.clientWidth-selected.offsetWidth)/2), behavior:"smooth"});
+      }
+
+      function showLoading() {
+        $("#items").innerHTML =
+          '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+      }
+
+      async function load() {
+        const key = active;
+        if (busy()) return;
+
+        $("#sectionTitle").textContent = RES[key].label;
+
+        $("#addBtn").hidden = !!RES[key].single;
+
+        $("#count").textContent = "";
+
+        showLoading();
+
+        try {
+          const data = await api("/api/admin/" + (RES[key].single ? "profile" : key));
+          if (key === "skills") cache["skill-categories"] = await api("/api/admin/skill-categories");
+
+          if (key !== active) return; // tab changed while loading
+
+          cache[key] = data;
+
+          renderItems();
+        } catch (e) {
+          if (key !== active) return;
+
+          cache[key] = RES[key].single ? {} : [];
+
+          $("#items").innerHTML = '<div class="empty">Could not load content. Tap Refresh to retry.</div>';
+          toast(e.message, true);
+        }
+      }
+
+      function renderItems() {
+        const box = $("#items"),
+          data = cache[active],
+          single = RES[active].single;
+
+        const all = single ? [data] : data || [];
+
+        const empty = !all.length || !all[0] || !Object.keys(all[0]).length;
+
+        const search = $("#search");
+
+        search.hidden = single || all.length < 7;
+
+        if (empty) {
+          $("#count").textContent = "";
+
+          box.innerHTML = `<div class="empty">Nothing here yet.${single ? "" : '<br><button class="btn primary small" id="emptyAdd">Add the first one</button>'}</div>`;
+
+          $("#emptyAdd")?.addEventListener("click", () =>
+            openEditor({ published: true, sort_order: 0 }),
+          );
+
+          return;
+        }
+
+        const q = query.toLowerCase();
+
+        const arr = q
+          ? all.filter((x) => JSON.stringify(x).toLowerCase().includes(q))
+          : all;
+
+        if (!single)
+          $("#count").textContent = q
+            ? `${arr.length} of ${all.length}`
+            : all.length;
+
+        box.innerHTML = "";
+
+        if (!arr.length) {
+          box.innerHTML = '<div class="empty">No matches.</div>';
+
+          return;
+        }
+
+        for (const x of arr) {
+          const b = document.createElement("button");
+
+          b.type = "button";
+
+          b.className = "item";
+
+          const th = thumbFor(x);
+
+          b.innerHTML =
+            (th
+              ? `<img class="thumb" src="${esc(safeMediaURL(th))}" alt="" loading="lazy">`
+              : "") +
+            `<span class="txt"><strong>${esc(titleFor(x))}</strong><span class="sub">${esc(subFor(x))}</span></span>` +
+            (x.published === false ? '<span class="badge">Draft</span>' : "") +
+            '<span class="chev" aria-hidden="true"><i data-lucide="chevron-right"></i></span>';
+
+          b.querySelector("img")?.addEventListener("error", event => event.target.remove(), {once:true});
+          b.onclick = () => openEditor(x);
+          box.appendChild(b);
+        }
+        refreshIcons();
+      }
+
+      function displayValue(v, type) {
+        if (type === "lines") return Array.isArray(v) ? v.join("\n") : v || "";
+
+        if (type === "tags") return Array.isArray(v) ? v.join(", ") : v || "";
+
+        if (type === "json")
+          return typeof v === "object" && v !== null
+            ? JSON.stringify(v, null, 2)
+            : v || "[]";
+
+        return v ?? "";
+      }
+
+      function openEditor(item = {}) {
+        if (!authenticated || busy()) return;
+        current = item;
+        editorResource = active;
+        requestKey = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+"-"+Math.random().toString(36).slice(2)+"-"+Math.random().toString(36).slice(2);
+        dirty = false;
+
+        const isEdit = !!item.id || RES[active].single;
+
+        $("#formTitle").textContent =
+          (isEdit ? "Edit " : "New ") + RES[active].label.toLowerCase();
+
+        $("#deleteBtn").hidden = !item.id || RES[active].single;
+
+        const fields = $("#fields");
+
+        fields.innerHTML = "";
+
+        for (const [key, label, type = "text"] of RES[editorResource].fields) {
+          const wrap = document.createElement("div");
+
+          const id = "f_" + key;
+
+          wrap.className =
+            "field" +
+            (["textarea", "json", "lines", "tags", "upload"].includes(type)
+              ? " full"
+              : "");
+
+          if (type === "boolean") {
+            wrap.innerHTML = `<label class="toggle"><input id="${id}" type="checkbox" ${item[key] !== false ? "checked" : ""}> ${esc(label)}</label>`;
+          } else if (["textarea", "lines", "tags", "json"].includes(type)) {
+            wrap.innerHTML = `<label for="${id}">${esc(label)}</label><textarea id="${id}">${esc(displayValue(item[key], type))}</textarea>`;
+          } else if (type === "upload") {
+            const v = safeMediaURL(item[key] || "");
+            wrap.innerHTML = `<label for="${id}">${esc(label)}</label>
+              <div class="upload"><img id="pv_${key}" alt="${esc(label)} preview" hidden>
+                <input class="pick" id="${id}" value="${esc(v)}" placeholder="Paste a URL or upload below"></div>
+              <a id="doc_${key}" class="file-link" target="_blank" rel="noopener noreferrer" hidden>Open uploaded PDF</a>
+              <div class="upload"><input type="file" id="up_${key}" accept=".png,.jpg,.jpeg,.webp,.pdf,image/png,image/jpeg,image/webp,application/pdf">
+                <button type="button" class="btn small" id="ub_${key}"><i data-lucide="upload"></i><span>Upload</span></button></div>
+              <div class="hint">PNG, JPG, JPEG, WEBP or PDF · up to 5 MiB. Upload first, then save changes.</div>`;
+          } else if (type === "category" || type === "project-type") {
+            const options = type === "category" ? [{id:"",name:"No category"}, ...(cache["skill-categories"] || [])] : [{id:"project",name:"Project"},{id:"website",name:"Website"}];
+            wrap.innerHTML = `<label for="${id}">${esc(label)}</label><select id="${id}">${options.map(x=>`<option value="${esc(x.id)}" ${String(item[key] || (type==="project-type" ? "project" : ""))===String(x.id) ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select>`;
+          } else {
+            const required = (REQUIRED[active] || []).includes(key) ? "required" : "";
+            const limits = key === "percent" ? 'min="0" max="100" step="1"' : key === "years_coding" ? 'min="0" step="1"' : type === "number" ? 'step="1"' : "";
+            wrap.innerHTML = `<label for="${id}">${esc(label)}</label><input id="${id}" ${required} ${limits} type="${type === "number" ? "number" : "text"}" value="${esc(displayValue(item[key], type))}">`;
+          }
+
+          fields.appendChild(wrap);
+          if (type === "upload") {
+            wrap.querySelector("button").onclick = () => upload(key);
+            wrap.querySelector(".pick").addEventListener("input", event => preview(key, event.target.value));
+            wrap.querySelector('input[type="file"]').addEventListener("change", () => { dirty = true; });
+            preview(key, item[key] || "");
+          }
+        }
+        updateBusy();
+        refreshIcons();
+        $("#editor").showModal();
+
+        $("#editor .body").scrollTop = 0;
+      }
+
+      function preview(key, value) {
+        const image = $("#pv_" + key), doc = $("#doc_" + key);
+        if (!image || !doc) return;
+        const url = safeMediaURL(value || "");
+        const pdf = /\.pdf($|\?)/i.test(url);
+        image.hidden = !url || pdf;
+        doc.hidden = !url || !pdf;
+        if (pdf) doc.href = url;
+        else if (url) {
+          image.src = url;
+          image.onerror = () => { image.hidden = true; toast("Image preview unavailable. Check that the storage bucket is public.", true); };
+        }
+      }
+
+      async function upload(key) {
+        if (busy()) return;
+        const picker = $("#up_" + key), file = picker.files[0];
+        if (!file) return toast("Choose a file first", true);
+        if (!/\.(png|jpe?g|webp|pdf)$/i.test(file.name)) return toast("Choose PNG, JPG, JPEG, WEBP or PDF", true);
+        if (file.size > 5 * 1024 * 1024) return toast("Upload exceeds 5 MiB", true);
+        const btn = $("#ub_" + key);
+        pendingUploads.add(key); updateBusy();
+        btn.disabled = true; btn.innerHTML = '<span class="mini-spinner"></span><span>Uploading…</span>';
+        try {
+          const body = new FormData(); body.append("file", file);
+          const result = await api("/api/admin/upload", {method:"POST",body});
+          if (!safeMediaURL(result.url)) throw new Error("Storage returned an invalid URL. Please retry.");
+          $("#f_" + key).value = result.url;
+          picker.value = "";
+          preview(key, result.url); dirty = true;
+          toast("Uploaded. Save changes to attach this file.");
+        } catch (e) { toast(e.message, true); }
+        finally {
+          pendingUploads.delete(key); updateBusy(); btn.disabled = false;
+          btn.innerHTML = '<i data-lucide="upload"></i><span>Upload</span>'; refreshIcons();
+        }
+      }
+
+      function collect() {
+        const out = {};
+
+        for (const [key, label, type = "text"] of RES[editorResource].fields) {
+          const el = $("#f_" + key);
+
+          let v = type === "boolean" ? el.checked : el.value.trim();
+
+          if (type === "upload" && $("#up_"+key)?.files.length) throw new Error("Upload the selected file before saving, or clear the file selection.");
+          if (type === "number") {
+            v = v === "" ? 0 : Number(v);
+            if (!Number.isInteger(v)) throw new Error(label + " must be a whole number");
+          }
+          if (type === "category" && !v) v = null;
+
+          if (type === "lines")
+            v = v
+              ? v
+
+                  .split("\n")
+
+                  .map((x) => x.trim())
+
+                  .filter(Boolean)
+              : [];
+
+          if (type === "tags")
+            v = v
+              ? v
+
+                  .split(",")
+
+                  .map((x) => x.trim())
+
+                  .filter(Boolean)
+              : [];
+
+          if (type === "json") {
+            try {
+              v = v ? JSON.parse(v) : [];
+            } catch {
+              throw new Error(`${label} isn't valid JSON`);
+            }
+          }
+
+          out[key] = v;
+        }
+
+        return out;
+      }
+
+      async function save(e) {
+        e.preventDefault();
+        if (busy() || !authenticated) return;
+        const btn = $("#saveBtn"), resource = editorResource;
+        try {
+          const data = collect();
+          saving = true; updateBusy();
+          btn.innerHTML = '<span class="mini-spinner"></span><span>Saving…</span>';
+          const result = await api(RES[resource].single ? "/api/admin/profile" : "/api/admin/"+resource+(current?.id ? "/"+current.id : ""), {
+            method:RES[resource].single || current?.id ? "PATCH" : "POST",
+            headers:!RES[resource].single && !current?.id ? {"Idempotency-Key":requestKey} : {}, body:JSON.stringify({data})});
+          if (!RES[resource].single && !result.id) throw new Error("Save was not confirmed. Refresh before retrying.");
+          current = result; dirty = false;
+          $("#editor").close(); document.body.appendChild($("#toast"));
+          toast(data.published === false ? "Saved as draft" : "Saved and published");
+        } catch (err) { toast(err.message, true); }
+        finally {
+          saving = false; updateBusy();
+          btn.innerHTML = '<i data-lucide="check"></i><span>Save changes</span>'; refreshIcons();
+        }
+        if (!$("#editor").open) await load();
+      }
+
+      function askConfirm(title) {
+        return new Promise((resolve) => {
+          const d = $("#confirm");
+          $("#confirmTitle").textContent = title;
+
+          let settled = false;
+          const done = (value) => {
+            if (settled) return;
+            settled = true;
+            d.close();
+            resolve(value);
+          };
+
+          $("#yesBtn").onclick = () => done(true);
+          $("#noBtn").onclick = () => done(false);
+          d.oncancel = (e) => {
+            e.preventDefault();
+            done(false);
+          };
+
+          d.showModal();
+        });
+      }
+
+      async function remove() {
+        if (!current?.id || busy()) return;
+
+        if (!(await askConfirm(`Delete "${titleFor(current)}"?`))) return;
+
+        removing = true; updateBusy();
+        try {
+          await api(`/api/admin/${editorResource}/${current.id}`, { method: "DELETE" });
+
+          $("#editor").close();
+          current = null;
+          dirty = false;
+          document.body.appendChild($("#toast")); toast("Deleted");
+        } catch (e) { toast(e.message, true); }
+        finally { removing = false; updateBusy(); }
+        if (!$("#editor").open) await load();
+      }
+
+      async function closeEditor() {
+        if (busy()) return toast("Wait for the current request to finish.", true);
+        if (dirty && !(await askConfirm("Discard your changes?"))) return;
+
+        dirty = false;
+
+        $("#editor").close();
+      }
+
+      $("#form").addEventListener("submit", save);
+
+      $("#form").addEventListener("input", () => (dirty = true));
+
+      $("#closeBtn").onclick = $("#cancelBtn").onclick = closeEditor;
+
+      $("#editor").addEventListener("cancel", (e) => {
+        if (busy() || dirty) {
+          e.preventDefault();
+
+          closeEditor();
+        }
+      });
+
+      $("#deleteBtn").onclick = remove;
+
+      $("#addBtn").onclick = () =>
+        openEditor({ published: true, sort_order: 0 });
+
+      $("#refresh").onclick = load;
+
+      $("#search").addEventListener("input", (e) => {
+        query = e.target.value.trim();
+
+        renderItems();
+      });
+
+      (async () => {
+        $("#addBtn").disabled = true;
+        renderTabs();
+        try {
+          const b = await api("/api/admin/bootstrap");
+          authenticated = true;
+          cache["skill-categories"] = b.content?.skill_categories || [];
+          $("#addBtn").disabled = false;
+
+          const h = $("#hello");
+
+          h.textContent = `Hi ${b.user?.first_name || "Dela"}, you're signed in`;
+
+          h.classList.add("ok");
+
+          await load();
+        } catch (e) {
+          $("#hello").textContent = "Sign-in needed. Open this from Telegram.";
+
+          showLoading();
+
+          $("#items").innerHTML =
+            `<div class="empty">Couldn't verify your session.</div>`;
+
+          toast(e.message, true);
+        }
+      })();
+    </script>
+  </body>
+</html>

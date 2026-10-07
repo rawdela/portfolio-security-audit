@@ -1,0 +1,8 @@
+reconnaissance/javascript//cms.js:459:        const response = await fetch(API + "/api/public/content", {
+reconnaissance/javascript//cms-config.js:2:window.PORTFOLIO_CMS_API = "https://eugenedelagogah.onrender.com";
+reconnaissance/javascript//main.js:195:      <a class="soc-btn" href="https://www.linkedin.com/in/eugene-gogah-474783328" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn">${I.linkedin}</a>
+reconnaissance/javascript//main.js:198:      <a class="soc-btn" href="https://wa.me/233559336898" target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="WhatsApp">${I.whatsapp}</a>
+reconnaissance/javascript//main.js:199:      <a class="soc-btn" href="https://instagram.com/raw._dela" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">${I.instagram}</a>
+reconnaissance/javascript//main.js:200:      <a class="soc-btn" href="https://www.tiktok.com/@raw.dela" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTok">${I.tiktok}</a>
+reconnaissance/javascript//main.js:201:      <a class="soc-btn" href="https://youtube.com/@thetech_junction" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTube">${I.youtube}</a>
+reconnaissance/javascript//main.js:202:      <a class="soc-btn" href="https://github.com/rawdela" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub">${I.github}</a>

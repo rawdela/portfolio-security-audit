@@ -1,0 +1,6 @@
+<script src="/js/loader.js"
+<script src="/js/analytics.js"
+<script src="/js/main.js"
+<script src="/js/index.js"
+<script src="/js/cms-config.js"
+<script src="/js/cms.js"

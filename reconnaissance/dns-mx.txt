@@ -1,0 +1,20 @@
+
+; <<>> DiG 9.10.6 <<>> MX eugenedelagogah.vercel.app
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15869
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;eugenedelagogah.vercel.app.	IN	MX
+
+;; AUTHORITY SECTION:
+vercel.app.		900	IN	SOA	ns1.vercel-dns-3.com. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400
+
+;; Query time: 68 msec
+;; SERVER: 192.168.188.1#53(192.168.188.1)
+;; WHEN: Tue Oct 06 14:54:39 GMT 2026
+;; MSG SIZE  rcvd: 136
+

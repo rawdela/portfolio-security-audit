@@ -1,0 +1,4 @@
+subject=CN=*.vercel.app
+issuer=C=US, O=Google Trust Services, CN=WR1
+notBefore=Aug 29 19:48:09 2026 GMT
+notAfter=Nov 27 19:48:08 2026 GMT

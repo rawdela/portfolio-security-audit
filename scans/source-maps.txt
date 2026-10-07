@@ -1,0 +1,6 @@
+/js/loader.js.map              404
+/js/analytics.js.map           404
+/js/main.js.map                404
+/js/index.js.map               404
+/js/cms-config.js.map          404
+/js/cms.js.map                 404

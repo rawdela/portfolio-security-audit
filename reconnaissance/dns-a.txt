@@ -1,0 +1,21 @@
+
+; <<>> DiG 9.10.6 <<>> A eugenedelagogah.vercel.app
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 40221
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;eugenedelagogah.vercel.app.	IN	A
+
+;; ANSWER SECTION:
+eugenedelagogah.vercel.app. 245	IN	A	216.198.79.67
+eugenedelagogah.vercel.app. 245	IN	A	64.29.17.67
+
+;; Query time: 86 msec
+;; SERVER: 192.168.188.1#53(192.168.188.1)
+;; WHEN: Tue Oct 06 14:53:54 GMT 2026
+;; MSG SIZE  rcvd: 87
+

@@ -1,0 +1,7 @@
+/.DS_Store                404
+/backup.zip               404
+/site.zip                 404
+/database.sql             404
+/config.json              404
+/config.js                404
+/debug.log                404

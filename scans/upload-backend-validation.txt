@@ -1,0 +1,64 @@
+./Portfolio website/eugenedelagogah/backend/app/main.py:17:    UploadFile,
+./Portfolio website/eugenedelagogah/backend/app/main.py:240:@app.post("/api/admin/upload")
+./Portfolio website/eugenedelagogah/backend/app/main.py:241:async def upload_media(file: UploadFile = File(...), user=Depends(require_admin)):
+./Portfolio website/eugenedelagogah/backend/app/main.py:242:    allowed = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".pdf": "application/pdf"}
+./Portfolio website/eugenedelagogah/backend/app/main.py:245:        raise HTTPException(415, "Only PNG, JPG, JPEG, WEBP and PDF uploads are supported")
+./Portfolio website/eugenedelagogah/backend/app/main.py:246:    # Some iOS file pickers send an empty/octet-stream MIME; the signature is authoritative.
+./Portfolio website/eugenedelagogah/backend/app/main.py:247:    if file.content_type not in {allowed[ext], "application/octet-stream", "" , None}:
+./Portfolio website/eugenedelagogah/backend/app/main.py:249:    content = await file.read(5 * 1024 * 1024 + 1)
+./Portfolio website/eugenedelagogah/backend/app/main.py:250:    if len(content) > 5 * 1024 * 1024:
+./Portfolio website/eugenedelagogah/backend/app/main.py:251:        raise HTTPException(413, "Upload exceeds 5 MiB")
+./Portfolio website/eugenedelagogah/backend/app/main.py:252:    valid = ((ext == ".png" and content.startswith(b"\x89PNG\r\n\x1a\n")) or
+./Portfolio website/eugenedelagogah/backend/app/main.py:253:             (ext in {".jpg", ".jpeg"} and content.startswith(b"\xff\xd8\xff")) or
+./Portfolio website/eugenedelagogah/backend/app/main.py:254:             (ext == ".webp" and content.startswith(b"RIFF") and content[8:12] == b"WEBP") or
+./Portfolio website/eugenedelagogah/backend/app/main.py:255:             (ext == ".pdf" and content.startswith(b"%PDF-")))
+./Portfolio website/eugenedelagogah/backend/app/main.py:258:    path = f"uploads/{uuid.uuid4().hex}{ext}"
+./Portfolio website/eugenedelagogah/backend/app/main.py:262:        bucket.upload(path, content, {"content-type": allowed[ext], "upsert": "false"})
+./Portfolio website/eugenedelagogah/backend/app/main.py:270:        logger.error("Media upload failed: bucket=%s type=%s extension=%s bytes=%d", settings.supabase_storage_bucket, type(exc).__name__, ext, len(content))
+./Portfolio website/eugenedelagogah/backend/app/main.py:271:        raise HTTPException(503, "Storage upload failed. Check the public media bucket configuration or retry.") from None
+./Portfolio website/eugenedelagogah/backend/app/main.py:272:    return {"url": url, "path": path, "content_type": allowed[ext]}
+./Portfolio website/eugenedelagogah/backend/app/main.py:564:        limit = 6 * 1024 * 1024 if scope["path"] == "/api/admin/upload" else 256 * 1024
+./Portfolio website/eugenedelagogah/backend/tests/test_security.py:47:    def test_upload_route_and_file_validation(self):
+./Portfolio website/eugenedelagogah/backend/tests/test_security.py:49:        for name, content, mime, expected in (('bad.svg',b'<svg/>','image/svg+xml',415), ('fake.png',b'bad','image/png',415), ('large.png',b'x'*(5*1024*1024+1),'image/png',413)):
+./Portfolio website/eugenedelagogah/backend/tests/test_security.py:50:            self.assertEqual(self.client.post('/api/admin/upload', headers=headers, files={'file':(name,content,mime)}).status_code, expected)
+./Portfolio website/eugenedelagogah/backend/tests/test_security.py:53:        db.storage.from_.return_value.get_public_url.return_value='https://example.com/image.png'
+./Portfolio website/eugenedelagogah/backend/tests/test_security.py:55:            response=self.client.post('/api/admin/upload', headers=headers, files={'file':('ok.png',b'\x89PNG\r\n\x1a\ncontent','image/png')})
+./Portfolio website/eugenedelagogah/backend/tests/test_security.py:67:        self.assertEqual(self.client.post('/telegram/webhook',content=b'x'*(256*1024+1)).status_code,413)
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:34:    def upload(self, path, content, options): self.files[path] = (content, options)
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:121:    def test_upload_all_types_and_save_url(self):
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:122:        files = [('png',b'\x89PNG\r\n\x1a\ncontent','image/png'),('jpg',b'\xff\xd8\xffcontent','image/jpeg'),('jpeg',b'\xff\xd8\xffcontent','image/jpeg'),('webp',b'RIFFxxxxWEBPcontent','image/webp'),('pdf',b'%PDF-1.4 content','application/pdf')]
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:124:        for ext, content, mime in files:
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:126:                response = self.client.post('/api/admin/upload',headers=self.auth,files={'file':('audit.'+ext,content,mime)})
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:128:                upload = response.json()
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:129:                self.assertEqual(self.db.files[upload['path']][1]['content-type'],mime)
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:130:                self.assertEqual(self.client.patch('/api/admin/education/'+record['id'],headers=self.auth,json={'data':{'image_url':upload['url']}}).status_code,200)
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:132:                self.assertEqual(saved['image_url'],upload['url'])
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:133:        response = self.client.post('/api/admin/upload',headers=self.auth,files={'file':('ios.png',b'\x89PNG\r\n\x1a\ncontent','application/octet-stream')})
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:146:        with patch.object(self.db,'upload',side_effect=RuntimeError('SECRET MUST NOT APPEAR')):
+./Portfolio website/eugenedelagogah/backend/tests/test_cms_flow.py:147:            response = self.client.post('/api/admin/upload',headers=self.auth,files={'file':('audit.pdf',b'%PDF-1.4 content','application/pdf')})
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:25:    def test_rerun_is_idempotent_and_preserves_edits_and_uploads(self):
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:31:            if action['media']:row[action['media_field']] = 'https://media.example.com/existing.png'
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:35:        edited['image_url']='https://media.example.com/new-upload.png'
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:61:            for value in ('https://example.com/image.png','../image.png','/missing.png'):
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:70:            if action['media']:row[action['media_field']] = 'https://media.example.com/owner.png'
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:77:    def test_obsolete_migration_icons_are_repaired_without_overwriting_uploads(self):
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:79:        current = {**{k:v for k,v in project.items() if not k.startswith('_')}, 'id':'original', 'image_url':'https://media.example.com/restored-icons/'+project['_icon_name']+'-obsolete.png'}
+./Portfolio website/eugenedelagogah/backend/tests/test_restore_static_content.py:82:        current['image_url']='https://media.example.com/uploads/owner.png'
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:4:uploaded public URL before linking it to a row. No credentials at import time.
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:14:import mimetypes
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:215:                expected_name = desired['_icon_name']+'-'+hashlib.sha256(desired['_svg'].encode()).hexdigest()[:24]+'.png'
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:226:    """Rasterize original SVG paths locally; keep SVG excluded from the upload bucket."""
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:249:        expression = '''(async()=>{const svg=SVG;const img=new Image();img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svg)));await img.decode();const canvas=document.createElement('canvas');canvas.width=96;canvas.height=96;canvas.getContext('2d').drawImage(img,0,0,96,96);return canvas.toDataURL('image/png').split(',')[1]})()'''.replace('SVG',json.dumps(svg))
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:270:def upload_media(db: Client, bucket: str, media: dict, root: Path, renderer: IconRenderer | None, http: httpx.Client) -> tuple[str,str]:
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:274:        mime = mimetypes.guess_type(path.name)[0]
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:280:        content = renderer.rasterize(media['_svg']);mime = 'image/png'
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:282:        storage_path = 'restored-icons/'+media['_icon_name']+'-'+digest+'.png'
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:283:    if mime is None or mime not in {'image/png','image/jpeg','image/webp','application/pdf'} or len(content)>5242880:
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:284:        raise ValueError('Original media exceeds the existing bucket upload policy')
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:285:    # The immutable content-derived path makes reruns reuse uploads, never overwrite files.
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:290:        db.storage.from_(bucket).upload(storage_path,content,{'content-type':mime,'upsert':'false'})
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:298:    uploaded = [];updated = [];renderer = None
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:315:                    url,path=upload_media(db,bucket,action['media'],root,renderer,http)
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:316:                    values[field]=url;uploaded.append({'path':path,'url':url})
+./Portfolio website/eugenedelagogah/backend/scripts/restore_static_content.py:329:    return {'rows':updated,'media':uploaded}
+./Portfolio website/eugenedelagogah/scripts/build_static.py:10:for name in ('index.html', 'about.html', 'awards.html', 'experience.html', 'projects.html', 'skills.html', '404.html', 'robots.txt', 'sitemap.xml', 'preview.png', '_headers'):

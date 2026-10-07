@@ -1,0 +1,38 @@
+623:      .upload {
+631:      .upload img {
+645:      .upload .pick {
+651:      .upload input[type="file"] {
+1201:      .field, .upload, .body, input, textarea, select, .item { min-width: 0; max-width: 100%; }
+1204:      .upload input[type="file"] { flex: 1 1 0; width: 0; }
+1409:            ["avatar_url", "Avatar", "upload"],
+1411:            ["resume_url", "Resume", "upload"],
+1453:            ["image_url", "Logo or image", "upload"],
+1481:            ["image_url", "Logo or image", "upload"],
+1503:            ["image_url", "Certificate image", "upload"],
+1533:            ["image_url", "Project image", "upload"],
+1583:      const pendingUploads = new Set();
+1585:      const busy = () => saving || removing || pendingUploads.size > 0;
+1589:        $("#fields").querySelectorAll("input, textarea, select, button").forEach(el => el.disabled = saving || removing || (pendingUploads.size > 0 && el.type === "file"));
+1628:        const timeout = setTimeout(() => controller.abort(), opt.body instanceof FormData ? 60000 : 45000);
+1630:          const multipart = opt.body instanceof FormData;
+1632:            headers: {...(multipart ? authHeaders() : headers()), ...(opt.headers || {})}});
+1897:            (["textarea", "json", "lines", "tags", "upload"].includes(type)
+1905:          } else if (type === "upload") {
+1908:              <div class="upload"><img id="pv_${key}" alt="${esc(label)} preview" hidden>
+1909:                <input class="pick" id="${id}" value="${esc(v)}" placeholder="Paste a URL or upload below"></div>
+1910:              <a id="doc_${key}" class="file-link" target="_blank" rel="noopener noreferrer" hidden>Open uploaded PDF</a>
+1911:              <div class="upload"><input type="file" id="up_${key}" accept=".png,.jpg,.jpeg,.webp,.pdf,image/png,image/jpeg,image/webp,application/pdf">
+1912:                <button type="button" class="btn small" id="ub_${key}"><i data-lucide="upload"></i><span>Upload</span></button></div>
+1913:              <div class="hint">PNG, JPG, JPEG, WEBP or PDF · up to 5 MiB. Upload first, then save changes.</div>`;
+1924:          if (type === "upload") {
+1925:            wrap.querySelector("button").onclick = () => upload(key);
+1952:      async function upload(key) {
+1957:        if (file.size > 5 * 1024 * 1024) return toast("Upload exceeds 5 MiB", true);
+1959:        pendingUploads.add(key); updateBusy();
+1960:        btn.disabled = true; btn.innerHTML = '<span class="mini-spinner"></span><span>Uploading…</span>';
+1962:          const body = new FormData(); body.append("file", file);
+1963:          const result = await api("/api/admin/upload", {method:"POST",body});
+1968:          toast("Uploaded. Save changes to attach this file.");
+1971:          pendingUploads.delete(key); updateBusy(); btn.disabled = false;
+1972:          btn.innerHTML = '<i data-lucide="upload"></i><span>Upload</span>'; refreshIcons();
+1984:          if (type === "upload" && $("#up_"+key)?.files.length) throw new Error("Upload the selected file before saving, or clear the file selection.");

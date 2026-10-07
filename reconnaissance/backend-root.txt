@@ -1,0 +1,19 @@
+HTTP/2 404 
+date: Tue, 06 Oct 2026 15:12:05 GMT
+content-type: application/json
+cache-control: no-store
+content-security-policy: default-src 'self'; script-src 'self' https://telegram.org https://unpkg.com 'sha256-crXcWCZQjRmNfnoiW7pVn2hgOqgpdSiODBYaAyrUaR4='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self'; object-src 'none'; base-uri 'none'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: no-referrer
+rndr-id: ed8896f8-73af-4a5b
+server: cloudflare
+strict-transport-security: max-age=31536000
+vary: Origin
+vary: Accept-Encoding
+x-content-type-options: nosniff
+x-render-origin-server: uvicorn
+cf-cache-status: DYNAMIC
+cf-ray: a46599625f310c00-LIS
+alt-svc: h3=":443"; ma=86400
+
+{"detail":"Not Found"}

@@ -1,0 +1,40 @@
+reconnaissance/javascript//cms.js:102:    if (/\.pdf($|\?)/i.test(url)) { box.innerHTML = link(url, "Open PDF", "edu-link"); return; }
+reconnaissance/javascript//cms.js:104:    img.src = url; img.alt = alt || ""; img.loading = "lazy"; img.decoding = "async";
+reconnaissance/javascript//cms.js:131:      if (anchor && url) anchor.href = url;
+reconnaissance/javascript//cms.js:133:      else if (url) card.querySelector(kind === "education" ? ".edu-body" : ".award-body")?.insertAdjacentHTML("beforeend", link(url, kind === "education" ? "Visit Website" : "View Credential", selector.slice(1)));
+reconnaissance/javascript//cms.js:139:        card.href = safeURL(row.live_url || row.repo_url) || "#";
+reconnaissance/javascript//cms.js:143:          if (wrap) wrap.outerHTML = `<div class="iframe-wrap">${image(row.image_url, row.title, "", "width:100%;height:100%;object-fit:cover")}</div>`;
+reconnaissance/javascript//cms.js:146:          if (frame) frame.src = safeURL(row.live_url, ["https:"]) || "about:blank";
+reconnaissance/javascript//cms.js:151:        if (box) box.innerHTML = projectIcon(row);
+reconnaissance/javascript//cms.js:158:          remaining.forEach((label,url) => container.insertAdjacentHTML("beforeend",link(url,label,"proj-btn")));
+reconnaissance/javascript//cms.js:165:        bullets.innerHTML = array(row.bullets).map(value => `<li>${esc(value)}</li>`).join("");
+reconnaissance/javascript//cms.js:171:          const source = existing.find(anchor => anchor.href === url && normalized(anchor.textContent) === normalized(value.label));
+reconnaissance/javascript//cms.js:173:          else links.insertAdjacentHTML("beforeend",link(url,value.label || "Open","exp-link-btn"));
+reconnaissance/javascript//cms.js:183:        else tagBox.insertAdjacentHTML("beforeend",`<span class="tag">${esc(value)}</span>`);
+reconnaissance/javascript//cms.js:186:    return card.outerHTML;
+reconnaissance/javascript//cms.js:202:      return source.outerHTML;
+reconnaissance/javascript//cms.js:211:    const headerIcon = category.icon && !soft ? icon(category.icon,"cpu") : source?.querySelector(".skill-cat-icon")?.innerHTML || icon("user");
+reconnaissance/javascript//cms.js:229:      template.innerHTML = html;
+reconnaissance/javascript//cms.js:245:    const html = element.innerHTML,
+reconnaissance/javascript//cms.js:248:      element.innerHTML = html;
+reconnaissance/javascript//cms.js:250:      attributes.forEach(([name, value]) => element.setAttribute(name, value));
+reconnaissance/javascript//cms.js:389:            anchor.href = safeURL(platform === "email" && !row.url.startsWith("mailto:") ? "mailto:" + row.url : row.url) || "#";
+reconnaissance/javascript//cms.js:399:          hero.innerHTML = `${esc(first)}<br><span class="grad">${esc(rest.join(" "))}</span>`;
+reconnaissance/javascript//cms.js:412:          avatar.src = profile.avatar_url;
+reconnaissance/javascript//cms.js:416:        if (mail && profile?.email) { mail.href = "mailto:" + profile.email; textInto(meta,'a[href^="mailto:"]',profile.email); }
+reconnaissance/javascript//cms.js:418:        if (resume && safeURL(profile?.resume_url,["http:","https:"])) resume.href = profile.resume_url;
+reconnaissance/javascript//cms.js:420:        if (availability && profile?.availability) availability.innerHTML = profile.availability.split(",").map((value,index)=>`<span class="tag ${index===0?"a":index===1?"b":""}">${esc(value.trim())}</span>`).join("");
+reconnaissance/javascript//index.js:53:    d.innerHTML = lines[i++];
+reconnaissance/javascript//main.js:62:  document.documentElement.setAttribute("data-theme", t);
+reconnaissance/javascript//main.js:65:    el.innerHTML = t === "dark" ? I.sun : I.moon;
+reconnaissance/javascript//main.js:74:    img.src = src;
+reconnaissance/javascript//main.js:123:    wrap.innerHTML = `
+reconnaissance/javascript//main.js:192:    wrap.innerHTML = `<section class="footer-connect" aria-label="Connect with Eugene">
+reconnaissance/javascript//main.js:289:    img.src = src;
+reconnaissance/javascript//main.js:422:    bg.setAttribute("aria-hidden", "true");
+reconnaissance/javascript//main.js:423:    bg.innerHTML = `
+reconnaissance/javascript//main.js:515:      hbg.setAttribute("aria-expanded", open);
+reconnaissance/javascript//main.js:516:      mob.setAttribute("aria-hidden", !open);
+reconnaissance/javascript//main.js:521:        hbg.setAttribute("aria-expanded", false);
+reconnaissance/javascript//main.js:522:        mob.setAttribute("aria-hidden", true);
+reconnaissance/javascript//loader.js:8:  document.documentElement.setAttribute('data-theme', theme);

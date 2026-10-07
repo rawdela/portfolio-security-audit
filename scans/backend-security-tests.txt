@@ -1,0 +1,26 @@
+/Users/mathewkwablagogah/Desktop/My Stuff/My Portfolio/Github/Portfolio website/eugenedelagogah/backend/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_auth_and_allowlist (tests.test_security.SecurityTests.test_auth_and_allowlist) ... ok
+test_invalid_sessions (tests.test_security.SecurityTests.test_invalid_sessions) ... ok
+test_payload_validation (tests.test_security.SecurityTests.test_payload_validation) ... ok
+test_production_fails_closed (tests.test_security.SecurityTests.test_production_fails_closed) ... ok
+test_public_content_returns_and_filters (tests.test_security.SecurityTests.test_public_content_returns_and_filters) ... ok
+test_public_skill_nesting (tests.test_security.SecurityTests.test_public_skill_nesting) ... ok
+test_request_limit_and_headers (tests.test_security.SecurityTests.test_request_limit_and_headers) ... ok
+test_upload_route_and_file_validation (tests.test_security.SecurityTests.test_upload_route_and_file_validation) ... ok
+test_valid_session (tests.test_security.SecurityTests.test_valid_session) ... ok
+test_webhook_secret (tests.test_security.SecurityTests.test_webhook_secret) ... ok
+test_content_rows_are_copied (tests.test_backend_regressions.BackendRegressions.test_content_rows_are_copied) ... ok
+test_dry_run_without_credentials_or_writes (tests.test_backend_regressions.BackendRegressions.test_dry_run_without_credentials_or_writes) ... ok
+test_import_order_and_foreign_keys (tests.test_backend_regressions.BackendRegressions.test_import_order_and_foreign_keys) ... ok
+test_malformed_urls_are_validation_errors (tests.test_backend_regressions.BackendRegressions.test_malformed_urls_are_validation_errors) ... ok
+test_nullable_category_id (tests.test_backend_regressions.BackendRegressions.test_nullable_category_id) ... ok
+test_parse_failure_precedes_database_cleanup (tests.test_backend_regressions.BackendRegressions.test_parse_failure_precedes_database_cleanup) ... ok
+test_project_link_classification (tests.test_backend_regressions.BackendRegressions.test_project_link_classification) ... ok
+test_required_fields_and_missing_delete (tests.test_backend_regressions.BackendRegressions.test_required_fields_and_missing_delete) ... ok
+test_skills_in_draft_categories_stay_private (tests.test_backend_regressions.BackendRegressions.test_skills_in_draft_categories_stay_private) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.503s
+
+OK

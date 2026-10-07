@@ -1,0 +1,28 @@
+Stored HTML/XSS marker test: PASS
+
+Test field:
+Project description – Basic Vulnerability Scanner
+
+Payload:
+XSS-AUDIT-TEST <b>SHOULD-NOT-BE-BOLD</b>
+
+Observed:
+Literal <b> and </b> tags were displayed in the browser.
+The supplied markup was not interpreted as HTML.
+
+Result:
+PASS – CMS output encoding successfully prevented HTML injection.
+
+Stored XSS:
+Not confirmed.
+
+Unsafe URL Scheme Test
+
+Field: Project Repository URL
+Input: javascript:alert(document.domain)
+
+Observed:
+CMS rejected the value with "Invalid URL in repo_url".
+
+Result:
+PASS – unsafe JavaScript URL schemes are rejected.

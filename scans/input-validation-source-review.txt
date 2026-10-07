@@ -1,0 +1,149 @@
+app/config.py:4:from pydantic import model_validator
+app/config.py:5:from pydantic_settings import BaseSettings, SettingsConfigDict
+app/config.py:24:    @model_validator(mode="after")
+app/security.py:3:import json
+app/security.py:6:from fastapi import Header, HTTPException
+app/security.py:13:        raise HTTPException(401, "Missing or invalid Telegram init data")
+app/security.py:28:        user = json.loads(data["user"])
+app/security.py:33:        raise HTTPException(401, "Invalid or expired Telegram session") from None
+app/security.py:43:        raise HTTPException(403, "Not authorized")
+app/content.py:17:    """Normalize SDK JSON into the row dictionaries required by the CMS."""
+app/content.py:22:    return [dict(row) for row in data]
+app/main.py:16:    HTTPException,
+app/main.py:22:from fastapi.responses import FileResponse, JSONResponse
+app/main.py:27:from pydantic import BaseModel
+app/main.py:42:    openapi_url=None if settings.app_env == "production" else "/openapi.json",
+app/main.py:53:        "PATCH",
+app/main.py:70:class Payload(BaseModel):
+app/main.py:94:def validate_payload(data: dict[str, Any], fields: list[str]) -> dict[str, Any]:
+app/main.py:96:        raise HTTPException(422, "Empty payload or unsupported fields")
+app/main.py:101:                raise HTTPException(422, f"Invalid {key}")
+app/main.py:104:                raise HTTPException(422, "Invalid published flag")
+app/main.py:107:                raise HTTPException(422, f"Invalid {key}")
+app/main.py:109:                raise HTTPException(422, f"Invalid {key}")
+app/main.py:113:                        raise HTTPException(422, "Each link requires a valid HTTP(S) URL and text label")
+app/main.py:121:                    raise HTTPException(422, "Invalid category ID") from None
+app/main.py:123:                raise HTTPException(422, "Invalid category ID")
+app/main.py:125:            raise HTTPException(422, f"Invalid {key}")
+app/main.py:131:                raise HTTPException(422, f"Invalid URL in {key}")
+app/main.py:133:            raise HTTPException(422, "Project type must be website or project")
+app/main.py:140:    # Never log exception bodies, URLs, headers or payloads containing credentials.
+app/main.py:144:        return JSONResponse({"detail": "Invalid fields or category. Refresh and check the record."}, status_code=422)
+app/main.py:146:        return JSONResponse({"detail": "This record already exists."}, status_code=409)
+app/main.py:147:    return JSONResponse({"detail": "CMS database unavailable. Please retry later."}, status_code=503)
+app/main.py:153:    return JSONResponse({"detail": "CMS service is not configured or unavailable."}, status_code=503)
+app/main.py:209:@app.patch("/api/admin/profile")
+app/main.py:211:    payload: Payload,
+app/main.py:214:    data = validate_payload(
+app/main.py:215:        payload.data,
+app/main.py:240:@app.post("/api/admin/upload")
+app/main.py:245:        raise HTTPException(415, "Only PNG, JPG, JPEG, WEBP and PDF uploads are supported")
+app/main.py:248:        raise HTTPException(415, "File type does not match its extension")
+app/main.py:251:        raise HTTPException(413, "Upload exceeds 5 MiB")
+app/main.py:257:        raise HTTPException(415, "File content does not match its extension")
+app/main.py:271:        raise HTTPException(503, "Storage upload failed. Check the public media bucket configuration or retry.") from None
+app/main.py:281:        raise HTTPException(
+app/main.py:303:@app.post("/api/admin/{resource}")
+app/main.py:304:def create_resource(resource: str, payload: Payload, user=Depends(require_admin), idempotency_key: str = Header(default="")):
+app/main.py:306:        raise HTTPException(404, "Unknown resource")
+app/main.py:308:    data = validate_payload(payload.data, fields)
+app/main.py:310:        raise HTTPException(422, "Required resource fields are missing or blank")
+app/main.py:312:        raise HTTPException(422, "Invalid request key")
+app/main.py:320:                raise HTTPException(409, "Request key was already used for different content")
+app/main.py:324:        rows = content_rows(db.table(table).insert(data).execute().data)
+app/main.py:332:        raise HTTPException(502, "Database did not confirm creation. Refresh before retrying.")
+app/main.py:336:@app.patch(
+app/main.py:342:    payload: Payload,
+app/main.py:346:        raise HTTPException(
+app/main.py:355:    data = validate_payload(payload.data, fields)
+app/main.py:357:        raise HTTPException(422, "Required resource fields cannot be blank")
+app/main.py:362:        .update(data)
+app/main.py:373:        raise HTTPException(
+app/main.py:390:        raise HTTPException(
+app/main.py:401:        raise HTTPException(404, "Item not found")
+app/main.py:405:async def telegram_api(method: str, payload: dict[str, Any]):
+app/main.py:410:            response = await client.post(f"https://api.telegram.org/bot{settings.telegram_bot_token}/{method}", json=payload)
+app/main.py:412:            result = response.json()
+app/main.py:418:        raise HTTPException(502, "Telegram service unavailable") from None
+app/main.py:421:@app.post("/telegram/webhook")
+app/main.py:429:        raise HTTPException(401, "Invalid webhook secret")
+app/main.py:431:        update = await request.json()
+app/main.py:435:        raise HTTPException(400, "Invalid webhook payload") from None
+app/main.py:443:        raise HTTPException(400, "Invalid webhook message")
+app/main.py:457:        raise HTTPException(400, "Invalid webhook message")
+app/main.py:573:                return await JSONResponse({"detail": "Request body too large"}, status_code=413)(scope, receive, send)
+app/main.py:591:        response = JSONResponse({"detail": "CMS operation failed. Please retry or contact the administrator."}, status_code=503)
+tests/test_security.py:2:os.environ.update(APP_ENV='test', TELEGRAM_BOT_TOKEN='test-token', AUTHORIZED_TELEGRAM_USER_IDS='123', ALLOW_ANY_USER='false', TELEGRAM_WEBHOOK_SECRET='test-secret')
+tests/test_security.py:5:import json
+tests/test_security.py:8:from unittest.mock import patch
+tests/test_security.py:10:from fastapi import HTTPException
+tests/test_security.py:19:    data = {'auth_date': str(int(time.time())), 'user': json.dumps({'id': 123})}
+tests/test_security.py:20:    data.update(changes)
+tests/test_security.py:35:            with self.subTest(data=data), self.assertRaises(HTTPException) as exc:
+tests/test_security.py:44:        self.assertEqual(self.client.post('/telegram/webhook', json={}).status_code, 401)
+tests/test_security.py:45:        self.assertEqual(self.client.post('/telegram/webhook', json={}, headers={'X-Telegram-Bot-Api-Secret-Token':'test-secret'}).status_code, 200)
+tests/test_security.py:50:            self.assertEqual(self.client.post('/api/admin/upload', headers=headers, files={'file':(name,content,mime)}).status_code, expected)
+tests/test_security.py:54:        with patch('app.main.get_db',return_value=db):
+tests/test_security.py:55:            response=self.client.post('/api/admin/upload', headers=headers, files={'file':('ok.png',b'\x89PNG\r\n\x1a\ncontent','image/png')})
+tests/test_security.py:57:        self.assertIn('url',response.json())
+tests/test_security.py:59:    def test_payload_validation(self):
+tests/test_security.py:60:        from app.main import validate_payload
+tests/test_security.py:61:        for payload in ({'percent':101}, {'published':'false'}, {'url':'javascript:alert(1)'}, {'links':[{'url':'data:text/html,bad'}]}, {'tags':'bad'}, {'unknown':'bad'}):
+tests/test_security.py:62:            with self.subTest(payload=payload), self.assertRaises(HTTPException):
+tests/test_security.py:63:                validate_payload(payload, ['percent','published','url','links','tags'])
+tests/test_security.py:64:        self.assertEqual(validate_payload({'percent':80},['percent']),{'percent':80})
+tests/test_security.py:67:        self.assertEqual(self.client.post('/telegram/webhook',content=b'x'*(256*1024+1)).status_code,413)
+tests/test_security.py:90:        with patch('app.content.get_db',return_value=db):
+tests/test_security.py:99:        with patch('app.content.get_db',return_value=db):
+tests/test_cms_flow.py:2:os.environ.update(APP_ENV='test', TELEGRAM_BOT_TOKEN='test-token', AUTHORIZED_TELEGRAM_USER_IDS='123', ALLOW_ANY_USER='false', TELEGRAM_WEBHOOK_SECRET='test-secret')
+tests/test_cms_flow.py:6:import json
+tests/test_cms_flow.py:12:from unittest.mock import patch
+tests/test_cms_flow.py:20:    data = {'auth_date':str(int(time.time())), 'user':json.dumps({'id':123})}
+tests/test_cms_flow.py:49:    def insert(self, data): self.operation, self.data = 'insert', copy.deepcopy(data); return self
+tests/test_cms_flow.py:50:    def update(self, data): self.operation, self.data = 'update', copy.deepcopy(data); return self
+tests/test_cms_flow.py:62:            for row in matches: row.update(self.data)
+tests/test_cms_flow.py:68:            else: record.update(self.data)
+tests/test_cms_flow.py:82:        self.patches = [patch('app.main.get_db', return_value=self.db),patch('app.content.get_db',return_value=self.db)]
+tests/test_cms_flow.py:83:        for p in self.patches:
+tests/test_cms_flow.py:91:        return response.json()
+tests/test_cms_flow.py:94:        response = self.client.post('/api/admin/'+resource, json={'data':data}, headers=headers)
+tests/test_cms_flow.py:96:        return response.json()
+tests/test_cms_flow.py:112:                self.assertEqual(self.client.patch(path,headers=self.auth,json={'data':{'published':False}}).status_code,200)
+tests/test_cms_flow.py:114:                self.assertTrue(any(x['id']==record['id'] for x in self.client.get('/api/admin/'+resource,headers=self.auth).json()))
+tests/test_cms_flow.py:115:                self.assertEqual(self.client.patch(path,headers=self.auth,json={'data':{'published':True,'sort_order':2}}).status_code,200)
+tests/test_cms_flow.py:126:                response = self.client.post('/api/admin/upload',headers=self.auth,files={'file':('audit.'+ext,content,mime)})
+tests/test_cms_flow.py:128:                upload = response.json()
+tests/test_cms_flow.py:130:                self.assertEqual(self.client.patch('/api/admin/education/'+record['id'],headers=self.auth,json={'data':{'image_url':upload['url']}}).status_code,200)
+tests/test_cms_flow.py:133:        response = self.client.post('/api/admin/upload',headers=self.auth,files={'file':('ios.png',b'\x89PNG\r\n\x1a\ncontent','application/octet-stream')})
+tests/test_cms_flow.py:142:        conflict = self.client.post('/api/admin/projects',headers={**self.auth,'Idempotency-Key':key},json={'data':{'title':'Different project'}})
+tests/test_cms_flow.py:146:        with patch.object(self.db,'upload',side_effect=RuntimeError('SECRET MUST NOT APPEAR')):
+tests/test_cms_flow.py:147:            response = self.client.post('/api/admin/upload',headers=self.auth,files={'file':('audit.pdf',b'%PDF-1.4 content','application/pdf')})
+tests/test_cms_flow.py:155:        with patch.object(settings, 'frontend_origins', origin), patch('app.main.public_content', side_effect=ValueError('SECRET MUST NOT APPEAR')):
+tests/test_cms_flow.py:173:        self.assertEqual([row['id'] for row in query.limit(1).execute().data], ['three'])
+tests/test_cms_flow.py:178:    def test_insert_copies_payload_and_rejects_duplicate_ids(self):
+tests/test_cms_flow.py:180:        payload = {'id':'one', 'tags':['original']}
+tests/test_cms_flow.py:181:        query = db.table('projects').insert(payload)
+tests/test_cms_flow.py:182:        payload['tags'].append('changed')
+tests/test_cms_flow.py:185:            db.table('projects').insert({'id':'one'}).execute()
+tests/test_restore_static_content.py:89:        from unittest.mock import patch
+tests/test_restore_static_content.py:92:            path = Path(folder)/'backup.json'
+tests/test_restore_static_content.py:94:            with patch('scripts.restore_static_content.create_client') as client, redirect_stderr(StringIO()), self.assertRaises(SystemExit):
+tests/test_restore_static_content.py:116:        from unittest.mock import patch
+tests/test_restore_static_content.py:126:            with patch('scripts.restore_static_content.tempfile.TemporaryDirectory',side_effect=new_profile), patch('scripts.restore_static_content.subprocess.Popen',side_effect=FileNotFoundError('missing Chrome')):
+tests/test_restore_static_content.py:140:    def test_update_json_filters_use_json_not_python_repr(self):
+tests/test_restore_static_content.py:141:        import json
+tests/test_restore_static_content.py:154:        query.eq.assert_any_call('tags',json.dumps(before['tags']))
+tests/test_backend_regressions.py:2:os.environ.update(APP_ENV="test", TELEGRAM_BOT_TOKEN="test-token", AUTHORIZED_TELEGRAM_USER_IDS="123", ALLOW_ANY_USER="false", TELEGRAM_WEBHOOK_SECRET="test-secret")
+tests/test_backend_regressions.py:7:from unittest.mock import MagicMock, patch
+tests/test_backend_regressions.py:9:from fastapi import HTTPException
+tests/test_backend_regressions.py:10:from app.main import validate_payload
+tests/test_backend_regressions.py:22:            for payload, fields in (({'url': url}, ['url']), ({'links': [{'url': url}]}, ['links'])):
+tests/test_backend_regressions.py:23:                with self.subTest(url=url), self.assertRaises(HTTPException) as exc:
+tests/test_backend_regressions.py:24:                    validate_payload(payload, fields)
+tests/test_backend_regressions.py:34:            with patch('app.main.get_db') as get_db:
+tests/test_backend_regressions.py:35:                response = client.post('/api/admin/projects', json={'data': {'description':'missing title'}})
+tests/test_backend_regressions.py:46:            payload = {'category_id': value}
+tests/test_backend_regressions.py:47:            self.assertEqual(validate_payload(payload, ['category_id']), {'category_id': None})
+tests/test_backend_regressions.py:48:            self.assertEqual(payload['category_id'], value)
+tests/test_backend_regressions.py:73:        with patch('app.content.get_db', return_value=db):
+tests/test_backend_regressions.py:100:            def insert(rows):

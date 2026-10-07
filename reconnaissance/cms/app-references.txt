@@ -1,0 +1,20 @@
+16:    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+17:    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+1181:      /* Keep controls within Telegram's safe viewport, including iOS sheets. */
+1343:    <script>
+1344:      const tg = window.Telegram?.WebApp;
+1373:      const authHeaders = () => ({
+1374:        ...(tg?.initData ? { "X-Telegram-Init-Data": tg.initData } : {}),
+1375:        ...(!tg?.initData && devId ? { "X-Dev-User-ID": devId } : {}),
+1381:        ...authHeaders(),
+1582:      let authenticated = false, saving = false, removing = false, editorResource = "profile", requestKey = "";
+1587:        $("#saveBtn").disabled = !authenticated || busy();
+1631:          const r = await fetch(path, {...opt, cache:"no-store", signal:controller.signal,
+1632:            headers: {...(multipart ? authHeaders() : headers()), ...(opt.headers || {})}});
+1633:          const result = await r.json().catch(() => null);
+1636:              authenticated = false;
+1637:              $("#hello").textContent = "Session expired or unauthorized. Reopen from Telegram.";
+1873:        if (!authenticated || busy()) return;
+2029:        if (busy() || !authenticated) return;
+2133:          authenticated = true;
+2145:          $("#hello").textContent = "Sign-in needed. Open this from Telegram.";

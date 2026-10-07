@@ -1,0 +1,8 @@
+reconnaissance/javascript//cms.js:29:      const url = new URL(value, location.origin);
+reconnaissance/javascript//cms.js:140:        textInto(card, ".preview-url", row.live_url ? new URL(safeURL(row.live_url) || location.origin).hostname : "");
+reconnaissance/javascript//main.js:57:    localStorage.getItem(TK) ||
+reconnaissance/javascript//main.js:63:  localStorage.setItem(TK, t);
+reconnaissance/javascript//main.js:88:  const currentPage = getNavPageName(window.location.pathname);
+reconnaissance/javascript//analytics.js:38:      var url = new URL(href, location.href);
+reconnaissance/javascript//analytics.js:87:    if (href.indexOf("http") === 0 && href.indexOf(location.origin) !== 0) {
+reconnaissance/javascript//loader.js:6:  const theme = localStorage.getItem('edg-theme') ||

@@ -1,0 +1,10 @@
+HTTP/1.1 301 Moved Permanently
+Date: Tue, 06 Oct 2026 15:23:18 GMT
+Content-Type: text/html; charset=utf-8
+Connection: keep-alive
+Location: https://eugenedelagogah.onrender.com/
+cf-cache-status: DYNAMIC
+Server: cloudflare
+CF-RAY: a465aa9eada74813-LIS
+alt-svc: h3=":443"; ma=86400
+

@@ -1,0 +1,3 @@
+/docs                404
+/redoc               404
+/openapi.json        404

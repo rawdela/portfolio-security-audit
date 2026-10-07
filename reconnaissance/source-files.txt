@@ -1,0 +1,6 @@
+./reconnaissance/javascript/analytics.js
+./reconnaissance/javascript/cms-config.js
+./reconnaissance/javascript/cms.js
+./reconnaissance/javascript/index.js
+./reconnaissance/javascript/loader.js
+./reconnaissance/javascript/main.js

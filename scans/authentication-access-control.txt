@@ -1,0 +1,21 @@
+Authentication & Access Control — Initial Tests
+
+Unauthenticated admin API access:       PASS
+Fake development identity:              PASS
+Invalid Telegram authentication data:   PASS
+Unauthenticated request:          PASS
+Fake development user header:     PASS
+Invalid Telegram initData:        PASS
+Different Telegram user:          PASS
+Admin CMS data access:            BLOCKED
+Unauthorized write access:        NOT OBSERVED
+
+Observed:
+All unauthorized requests returned HTTP 401.
+
+Conclusion:
+The production admin API requires valid Telegram authentication.
+No authentication bypass was identified in these tests.
+The CMS enforces Telegram-based authentication and restricts
+administrative access to the authorized account.
+No authentication bypass or broken access control was identified.

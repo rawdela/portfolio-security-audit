@@ -1,0 +1,208 @@
+# ============================================================
+# PORTFOLIO SECURITY AUDIT — .gitignore
+# Author: Eugene Dela Gogah
+# Purpose: Prevent sensitive data and unnecessary files
+# from being published to GitHub.
+# ============================================================
+
+
+# ------------------------------------------------------------
+# 1. ENVIRONMENT VARIABLES & SECRETS
+# ------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+!.env.sample
+
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+secrets/
+credentials/
+private/
+*.secret
+*.credentials
+
+
+# ------------------------------------------------------------
+# 2. AUTHENTICATION & SESSION DATA
+# ------------------------------------------------------------
+
+*token*.txt
+*token*.json
+*session*.json
+*session*.txt
+*cookie*.txt
+*cookies*.json
+
+*initdata*
+*initData*
+
+auth-dumps/
+session-dumps/
+
+
+# ------------------------------------------------------------
+# 3. PYTHON & DEVELOPMENT FILES
+# ------------------------------------------------------------
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+.venv/
+venv/
+env/
+
+*.egg-info/
+dist/
+build/
+
+
+# ------------------------------------------------------------
+# 4. NODE.JS & DEPENDENCIES
+# ------------------------------------------------------------
+
+node_modules/
+.npm/
+.cache/
+
+coverage/
+.nyc_output/
+
+
+# ------------------------------------------------------------
+# 5. MACOS & EDITOR FILES
+# ------------------------------------------------------------
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+*~
+
+
+# ------------------------------------------------------------
+# 6. RAW SCANNER DATA & SESSION FILES
+# ------------------------------------------------------------
+
+*.session
+*.session.properties
+
+*.har
+*.pcap
+*.pcapng
+
+*.zap
+*.zapdb
+
+zap-session/
+zap-workspace/
+
+# Local raw captures
+scans/raw/
+scans/private/
+scans/temp/
+
+reconnaissance/private/
+reconnaissance/raw/
+
+
+# ------------------------------------------------------------
+# 7. TEMPORARY & BACKUP FILES
+# ------------------------------------------------------------
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+*.log
+
+tmp/
+temp/
+.cache/
+
+
+# ------------------------------------------------------------
+# 8. DATABASE FILES
+# ------------------------------------------------------------
+
+*.db
+*.sqlite
+*.sqlite3
+
+*.sql.gz
+*.dump
+
+database-backups/
+backups/
+
+
+# ------------------------------------------------------------
+# 9. PRIVATE SCREENSHOTS & EVIDENCE
+# ------------------------------------------------------------
+
+screenshots/private/
+screenshots/raw/
+screenshots/unedited/
+
+evidence/private/
+evidence/raw/
+
+# Keep only reviewed/sanitized evidence publicly.
+
+
+# ------------------------------------------------------------
+# 10. LOCAL ARCHIVES
+# ------------------------------------------------------------
+
+*.zip
+*.tar
+*.tar.gz
+*.7z
+*.rar
+
+
+# ------------------------------------------------------------
+# 11. PRIVATE SECURITY NOTES
+# ------------------------------------------------------------
+
+notes/private/
+report/private/
+findings/private/
+
+internal-notes.md
+private-notes.md
+
+
+# ------------------------------------------------------------
+# 12. KEEP PUBLIC AUDIT DOCUMENTATION
+# ------------------------------------------------------------
+
+!README.md
+!SECURITY.md
+!LICENSE
+!scope.md
+!evidence-index.md
+
+!findings/**/*.md
+!report/**/*.md
+!docs/**/*.md
+
+# Sanitized ZAP report
+!scans/zap-public-portfolio-report.html

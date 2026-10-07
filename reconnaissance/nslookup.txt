@@ -1,0 +1,9 @@
+Server:		192.168.188.1
+Address:	192.168.188.1#53
+
+Non-authoritative answer:
+Name:	eugenedelagogah.vercel.app
+Address: 64.29.17.67
+Name:	eugenedelagogah.vercel.app
+Address: 216.198.79.67
+

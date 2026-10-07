@@ -1,0 +1,20 @@
+HTTP/2 405 
+date: Tue, 06 Oct 2026 15:23:54 GMT
+content-type: application/json
+allow: GET
+cache-control: no-store
+cf-cache-status: DYNAMIC
+content-security-policy: default-src 'self'; script-src 'self' https://telegram.org https://unpkg.com 'sha256-crXcWCZQjRmNfnoiW7pVn2hgOqgpdSiODBYaAyrUaR4='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self'; object-src 'none'; base-uri 'none'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: no-referrer
+rndr-id: 8c04739e-c6c1-4c31
+server: cloudflare
+strict-transport-security: max-age=31536000
+vary: Origin
+vary: Accept-Encoding
+x-content-type-options: nosniff
+x-render-origin-server: uvicorn
+cf-ray: a465ab825cd8b59b-LIS
+alt-svc: h3=":443"; ma=86400
+
+{"detail":"Method Not Allowed"}
