@@ -73,6 +73,22 @@ OWASP ZAP 2.17.0 was run against the public portfolio. ZAP reported 12 alert typ
 
 The CSP alerts were merged into Finding 002. Other alerts were classified as expected behavior, informational hardening, or false positives after manual verification.
 
+## Reproducible Testing Commands
+
+The repository includes an [`audit-commands.sh`](./audit-commands.sh)
+reference script containing the terminal commands used throughout the
+assessment.
+
+The commands are organized by testing phase and must be executed explicitly.
+
+Example:
+
+```bash
+chmod +x audit-commands.sh
+./audit-commands.sh --help
+./audit-commands.sh phase5
+```
+
 ## Repository Structure
 
 <pre>
@@ -81,6 +97,7 @@ portfolio-security-audit/
 ├── LICENSE
 ├── SECURITY.md
 ├── scope.md
+├── audit-commands.sh
 ├── evidence-index.md
 ├── findings/
 │   ├── critical/
